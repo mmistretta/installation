@@ -105,14 +105,6 @@ webapp_namespace="{{webapp_namespace}}"
 webapp_route="{{webapp_route}}"
 webapp_extra_services_configmap="{{webapp_extra_services_configmap}}"
 
-{% if enmasse %}
-# EnMasse
-
-enmasse_namespace="{{ enmasse_namespace | default('enmasse') }}"
-enmasse_rest_route="{{enmasse_rest_route}}"
-{% endif %}
-
-
 {% if apicurito %}
 apicurito_namespace="{{eval_apicurito_namespace}}"
 apicurito_route="{{apicurito_secure_ui_route}}"

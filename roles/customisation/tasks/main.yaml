@@ -197,27 +197,6 @@
 
 
 
-- name: Get enmasse rest route
-  shell: oc get route/restapi -o template --template \{\{.spec.host\}\} -n {{ enmasse_namespace | default('enmasse') }}
-  register: enmsase_route_cmd
-  when: enmasse
-
-- set_fact:
-    enmasse_rest_route: "https://{{enmsase_route_cmd.stdout}}"
-  when: enmasse
-
-- name: set enmasse component
-  set_fact:
-    enmasse_manifest:
-    - name: enmasse
-      version: "{{enmasse_version}}"
-      host: "{{enmasse_rest_route}}"
-  when: enmasse
-
-- set_fact:
-    component_manifests: "{{component_manifests}} + {{enmasse_manifest}}"
-  when: enmasse
-
 - name: Retrieve launcher sso hostvars
   shell: "oc get route/{{launcher_sso_prefix}} -o jsonpath='{.spec.host}' -n {{ launcher_namespace }}"
   register: launcher_sso_host_cmd

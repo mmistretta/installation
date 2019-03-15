@@ -20,11 +20,6 @@ che_server_image: 'registry.access.redhat.com/codeready-workspaces/server:1.0'
 che_operator_image: 'registry.access.redhat.com/codeready-workspaces/server-operator:1.0'
 che_installer: 'https://raw.githubusercontent.com/redhat-developer/codeready-workspaces-deprecated/{{che_version}}/operator-installer/deploy.sh'
 
-#controls whether enmasse is installed or not
-enmasse: true
-enmasse_version: '1.0.0.GA'
-enmasse_git_url: https://github.com/jboss-container-images/amq-online-images.git
-
 #controls whether fuse is installed or not
 fuse: true
 #This is the release tag for fuse on openshift in github currently used to pull in the templates and image streams
@@ -76,8 +71,8 @@ webapp_operator_release_tag: 'v0.0.6'
 webapp_operator_resources: 'https://raw.githubusercontent.com/integr8ly/tutorial-web-app-operator/{{webapp_operator_release_tag}}/deploy/'
 
 #controls whether apicurito is installed or not
-apicurito: true
-apicurito_version: '0.2.18.Final'
+#apicurito: true
+#apicurito_version: '0.2.18.Final'
 
 #controls whether nexus is installed or not
 nexus: true
