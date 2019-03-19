@@ -1,0 +1,41 @@
+---
+- name: "Delete enmasse cluster service broker"
+  shell: oc delete clusterservicebroker enmasse
+  register: output
+  failed_when: output.stderr != '' and 'not found' not in output.stderr and "the server doesn't have a resource type" not in output.stderr
+
+- copy:
+    src: patch-enmasse-csb-finalizer.json
+    dest: /tmp/patch-enmasse-csb-finalizer.json
+
+- name: Store contents of the enmasse csb finalizer patch
+  shell: cat /tmp/patch-enmasse-csb-finalizer.json
+  register: patch_enmasse_csb_finalizer
+
+- name: "Remove finalizers from enmasse cluster service broker"
+  shell: oc patch clusterservicebroker enmasse -p '{{ patch_enmasse_csb_finalizer.stdout }}'
+  register: output
+  failed_when: output.stderr != '' and 'not found' not in output.stderr
+
+- name: "Wait for enmasse cluster service broker to be removed"
+  shell: oc get clusterservicebroker enmasse
+  register: result
+  until: not result.stdout
+  retries: 50
+  delay: 10
+  failed_when: result.stdout
+  changed_when: False
+
+- name: Get enmasse apiServices
+  shell: for i in $(oc get apiServices | grep enmasse | awk '{ print $1}');do echo "$i"; done
+  register: api_services_output
+
+- name: "Delete enmasse apiServices"
+  shell: "oc delete apiservice {{ item }}"
+  with_items: "{{ api_services_output.stdout_lines }}"
+
+- name: "Delete project namespace: {{ enmasse_namespace | default('enmasse') }} "
+  shell: "oc delete project {{ enmasse_namespace | default('enmasse')}} "
+  register: output
+  failed_when: output.stderr != '' and 'not found' not in output.stderr and 'The system is ensuring all content is removed from this namespace.' not in output.stderr
+  changed_when: output.rc == 0

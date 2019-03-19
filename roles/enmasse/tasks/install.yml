@@ -1,0 +1,57 @@
+---
+- debug: msg="Using EnMasse git URL - {{ enmasse_git_url }}"
+
+- name: "Retrieve EnMasse {{ enmasse_version }} artifact"
+  git:
+    repo: "{{ enmasse_git_url }}"
+    dest: /tmp/enmasse-{{ enmasse_version }}
+    version: "{{ enmasse_version }}"
+
+- name: Ensure tmp dir exists
+  file:
+    path: /tmp/enmasse-{{ enmasse_version }}
+    state: directory
+
+- set_fact:
+    enmasse_playbook_location: enmasse-"{{ enmasse_version }}"/templates/ansible/playbooks/openshift/deploy_all.yml
+    enmasse_inventory_path: /tmp/enmasse-{{ enmasse_version }}/templates/ansible/inventory/
+
+- name: Generate EnMasse inventory hosts file
+  template:
+    src: enmasse_hosts.j2
+    dest: "{{ enmasse_inventory_path }}/hosts"
+
+- name: Check EnMasse namespace for existing resources
+  shell: oc get all -n {{ enmasse_namespace }}
+  register: enmasse_resources_exist
+
+- name: "Provision EnMasse {{ enmasse_version }}"
+  shell: ansible-playbook -i {{ enmasse_inventory_path }}/hosts /tmp/{{enmasse_playbook_location}}
+  args:
+    chdir: "../"
+  when: enmasse_resources_exist.stderr == "No resources found."
+
+- name: "Verify EnMasse deployment succeeded"
+  shell: sleep 5; oc get pods --namespace {{ enmasse_namespace }}  |  grep  "deploy"
+  register: result
+  until: not result.stdout
+  retries: 50
+  delay: 10
+  failed_when: result.stdout
+  changed_when: False
+
+- name: Add labels to namespace
+  shell: oc label --overwrite namespace {{ enmasse_namespace }} {{ monitoring_label_name }}={{ monitoring_label_value }} integreatly-middleware-service=true
+  register: namespace_label
+  failed_when: namespace_label.stderr != '' and 'not labeled' not in namespace_label.stderr
+  changed_when: namespace_label.rc == 0
+
+- name: Clean up EnMasse artifacts
+  file:
+    path: "{{ item }}"
+    state: absent
+  with_items:
+    - /tmp/enmasse-{{ enmasse_version }}.tgz
+    - /tmp/enmasse-{{ enmasse_version }}.zip
+    - /tmp/enmasse-{{ enmasse_version }}
+  when: enmasse_clean_artifacts

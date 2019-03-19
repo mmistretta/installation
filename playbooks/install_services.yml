@@ -108,13 +108,29 @@
     -
       name: Expose vars
       include_vars: "../roles/webapp/defaults/main.yml"
- #   - name: Install apicurito
- #     include_role:
- #       name: apicurito
- #     vars:
- #       apicurito_route_suffix: "{{ eval_app_host }}"
- #     tags: ['apicurito']
- #     when: apicurito
+    -
+      name: "Ensure postgresql tags are imported in openshift namespace for enmasse"
+      shell: oc -n openshift import-image postgresql --all
+      register: result
+      until: result.stdout
+      retries: 50
+      delay: 1
+      failed_when: not result.stdout
+      changed_when: False
+      when: enmasse
+    -
+      name: Install enmasse
+      include_role:
+        name: enmasse
+      tags: ['enmasse']
+      when: enmasse
+    - name: Install apicurito
+      include_role:
+        name: apicurito
+      vars:
+        apicurito_route_suffix: "{{ eval_app_host }}"
+      tags: ['apicurito']
+      when: apicurito
 
     - name: Expose vars
       include_vars: "../roles/apicurito/defaults/main.yml"

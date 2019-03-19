@@ -22,6 +22,7 @@ These products include:
 
 * Single Sign On
 * Managed Services Broker
+* EnMasse
 * Eclipse Che
 * Launcher
 * 3Scale
@@ -233,6 +234,17 @@ To configure custom account credentials, simply override the rhsso role environm
 ----
 $ ansible-playbook -i inventories/hosts playbooks/rhsso.yml -e rhsso_evals_username=<username> -e rhsso_evals_password=<password>
 ----
+
+=== Run EnMasse install playbook
+
+[source,shell]
+----
+$ oc login https://<openshift-master-url>
+$ ansible-playbook -i inventories/hosts playbooks/enmasse.yml
+----
+
+Once the playbook has completed a service named `EnMasse (standard)` will be available
+in the Service Catalog. This can be provisioned into your namespace to use EnMasse.
 
 === Run Che install playbook
 
