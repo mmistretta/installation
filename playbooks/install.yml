@@ -51,10 +51,4 @@
       vars:
         callback_url: "{{ launcher_sso_route }}/auth/realms/{{ eval_launcher_sso_realm }}/broker/github/endpoint"
       when: launcher
-- hosts: localhost
-  tasks:
-    - name: Install Custom Che Stack
-      include_role:
-        name: che
-      tags: ['che']
 
