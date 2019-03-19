@@ -286,6 +286,12 @@
 - name: remove generated template
   file: path='/tmp/generated_manifest' state=absent
 
+- debug:  
+    var: che_keycloak_route
+    var: che_keycloak_realm
+    var: che
+    var: launcher
+
 - name: Get SSO token
   uri:
     url: "{{ che_keycloak_route }}/auth/realms/{{ che_keycloak_realm }}/protocol/openid-connect/token"
