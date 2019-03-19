@@ -1,4 +1,16 @@
 ---
+- debug:  
+    var: che_keycloak_route
+
+- debug:
+    var: che_keycloak_realm
+
+- debug:
+    var: che
+
+- debug:
+    var: launcher
+
 - name: Get SSO token
   uri:
     url: "{{ che_keycloak_route }}/auth/realms/{{ che_keycloak_realm }}/protocol/openid-connect/token"
