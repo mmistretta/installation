@@ -11,6 +11,10 @@
 - debug:
     var: launcher
 
+- name: Export existing inventory
+  shell: oc get secret inventory -n webapp --template '{{index .data "generated_inventory"}}'  | base64 -d > inventory
+  when: che
+
 - name: Get SSO token
   uri:
     url: "{{ che_keycloak_route }}/auth/realms/{{ che_keycloak_realm }}/protocol/openid-connect/token"

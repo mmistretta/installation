@@ -1,0 +1,112 @@
+[local:vars]
+ansible_connection=local
+
+# The openshift apps suffix
+ocp_routing_subdomain="apps.mcochran-f0e0.openshiftworkshop.com"
+seed_user_count="101"
+
+# Cluster RHSSO Variables
+
+# The password for the admin user in admin realm
+rhsso_admin_password="de633b318b07494b8a14c97f93ff4ce1"
+# The admin user for the admin realm
+rhsso_admin_user="admin"
+# The route to the cluster RH-SSO
+rhsso_route="https://sso-sso.apps.mcochran-f0e0.openshiftworkshop.com"
+# The realm being used for logging into the cluster
+rhsso_realm="openshift"
+# The admin realm 
+rhsso_admin_realm="master"
+# The evals rhsso cluster admin email
+rhsso_cluster_admin_email="admin@example.com"
+# The evals rhsso cluster admin username
+rhsso_cluster_admin_username="admin@example.com"
+# The evals rhsso cluster admin password
+rhsso_cluster_admin_password="Password1"
+# The namespace the cluster rhsso is installed into 
+rhsso_namespace="sso"
+# This is the number of evals users we set up for the cluster
+rhsso_seed_users_count="101"
+# This is the format used for the seed user emails
+rhsso_seed_users_email_format=evals%02d@example.com
+# This is the format used for the usernames
+rhsso_seed_users_name_format=user%d
+
+# 3scale Variables
+
+# The namespace threescale is deployed to
+threescale_namespace="3scale"
+# The RHSSO client id used by threescale
+threescale_sso_client_id="3scale"
+# The cluster admin for threescale (logged in via rhsso)
+threescale_cluster_admin_username="admin"
+# the master token used for api calls to threescale
+threescale_master_token="2ehbmgq0"
+# the admin token used for api calls to threescale
+threescale_admin_token="ev5nb6bxahcrqecy"
+# the threescale admin route 
+threescale_system_admin_route="master.apps.mcochran-f0e0.openshiftworkshop.com"
+# the realm where threescale checks for users
+threescale_sso_realm="openshift"
+
+
+# CHE Variables
+
+# The namespace che is installed to 
+che_namespace="codeready"
+# The route for che api 
+che_route="https://codeready-codeready.apps.mcochran-f0e0.openshiftworkshop.com"
+# The realm che uses for auth 
+che_keycloak_realm="launcher_realm"
+# the keycloak client to use for getting a token to act against che API
+che_keycloak_client_id="che-client"
+# the keycloak route for che authentication
+che_keycloak_route="https://launcher-sso-launcher.apps.mcochran-f0e0.openshiftworkshop.com"
+# The che admin keycloak password to get an auth token to interact with the che API
+che_keycloak_password="owxdveOwkSJEGPTFodtFjtnBKrprTap6"
+# The che admin keycloak user to get an auth token to interact with the che API
+che_keycloak_user="launcheradmin"
+
+
+# Nexus Variables
+nexus_namespace="nexus"
+
+# Launcher Variables
+launcher_namespace="launcher"
+# Launcher Route 
+launcher_route="https://launcher-launcher.apps.mcochran-f0e0.openshiftworkshop.com"
+# launchers sso route 
+launcher_sso_route="https://launcher-sso-launcher.apps.mcochran-f0e0.openshiftworkshop.com"
+# The launcher admin sso password
+launcher_sso_password="owxdveOwkSJEGPTFodtFjtnBKrprTap6"
+# The launcher admin sso user
+launcher_sso_user="admin"
+
+# GITEA
+# the namespace gittea is installed into
+gitea_namespace="gitea"
+# the route to gitea
+gitea_route="https://gitea.apps.mcochran-f0e0.openshiftworkshop.com"
+gitea_admin_username="giteaadmin"
+gitea_admin_token="admintoken"
+gitea_admin_password=Password1"
+
+
+# WEB APP 
+webapp_namespace="webapp"
+webapp_route="https://tutorial-web-app-webapp.apps.mcochran-f0e0.openshiftworkshop.com"
+webapp_extra_services_configmap="extra-services"
+
+# EnMasse
+
+enmasse_namespace="enmasse"
+enmasse_rest_route="https://restapi-enmasse.apps.mcochran-f0e0.openshiftworkshop.com"
+
+
+apicurito_namespace="apicurito"
+apicurito_route="https://apicurito-app.apps.mcochran-f0e0.openshiftworkshop.com"
+
+
+[local]
+127.0.0.1
+

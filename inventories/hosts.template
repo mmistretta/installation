@@ -11,4 +11,4 @@ master
 ansible_user=ec2-user
 
 [master]
-127.0.0.1
+master1.mcochran-f0e0.internal
