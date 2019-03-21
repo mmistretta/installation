@@ -1,23 +1,52 @@
 ---
-- debug:  
-    var: che_keycloak_route
-
-- debug:
-    var: che_keycloak_realm
-
 - debug:
     var: che
 
 - debug:
     var: launcher
 
-- name: Export existing inventory
-  shell: oc get secret inventory -n webapp --template '{{index .data "generated_inventory"}}'  | base64 -d > inventory
-  when: che
+- debug:
+    var: che_keycloak_user
+
+- debug:
+    var: che_keycloak_password
+
+- debug:
+    var: che_keycloak_client_id
+
+# - name: Get existing inventory
+#  shell: "oc get secret inventory -n webapp --template '{{index .data 'generated_inventory'}}'  | base64 -d"
+#  register: inventory
+#  when: che
+
+- name: Get che route
+  shell: oc get route/codeready -o template --template \{\{.spec.host\}\} -n {{ che_namespace }}
+  register: che_route
+  when: che and launcher
+
+- set_fact:
+    che_route: "{{ che_route.stdout }}"
+
+- name: Get che keycloak route
+  shell: oc get route/launcher-sso -o template --template \{\{.spec.host\}\} -n launcher
+  register: che_keycloak_route
+  when: che and launcher
+
+- set_fact:
+    che_keycloak_route: "{{ che_keycloak_route.stdout }}"
+
+- debug:
+    var: che_keycloak_route
+
+- set_fact:
+    che_keycloak_realm: "launcher_realm" 
+
+- debug:
+    var: che_keycloak_realm
 
 - name: Get SSO token
   uri:
-    url: "{{ che_keycloak_route }}/auth/realms/{{ che_keycloak_realm }}/protocol/openid-connect/token"
+    url: "https://{{ che_keycloak_route }}/auth/realms/{{ che_keycloak_realm }}/protocol/openid-connect/token"
     method: POST
     body_format: form-urlencoded
     body:
