@@ -1,23 +1,24 @@
 ---
-- debug:
-    var: che
-
-- debug:
-    var: launcher
+- set_fact:
+    che_keycloak_user: "launcheradmin"
 
 - debug:
     var: che_keycloak_user
 
 - debug:
+    var: eval_launcher_sso_admin_password
+
+- set_fact:
+    che_keycloak_password: "{{ eval_launcher_sso_admin_password }}"
+
+- debug:
     var: che_keycloak_password
+
+- set_fact:
+    che_keycloak_client_id: "che-client"
 
 - debug:
     var: che_keycloak_client_id
-
-# - name: Get existing inventory
-#  shell: "oc get secret inventory -n webapp --template '{{index .data 'generated_inventory'}}'  | base64 -d"
-#  register: inventory
-#  when: che
 
 - name: Get che route
   shell: oc get route/codeready -o template --template \{\{.spec.host\}\} -n {{ che_namespace }}
@@ -26,6 +27,9 @@
 
 - set_fact:
     che_route: "{{ che_route.stdout }}"
+
+- debug:
+    var: che_route
 
 - name: Get che keycloak route
   shell: oc get route/launcher-sso -o template --template \{\{.spec.host\}\} -n launcher
@@ -64,7 +68,7 @@
 
 - name: Check if Che IDE is deployed
   uri: 
-    url: "{{che_route}}/api/stack"
+    url: "https://{{che_route}}/api/stack"
     validate_certs: false
     method: GET
     headers:
@@ -72,13 +76,17 @@
   retries: 100
   delay:   20
   register: response
-  until: response.status == 200
-  changed_when: false
+
+- debug:
+    var: response
+
+  #until: response.status == 200
+  #changed_when: false
 
 - name: Update custom stack to Che
   tags: install_custom_stack
   uri: 
-    url: "{{che_route}}/api/stack"
+    url: "https://{{che_route}}/api/stack"
     validate_certs: false
     method: POST
     return_content: yes
@@ -223,7 +231,7 @@
 
 - name: Give stack view/read permissions to all other users
   uri:
-    url: "{{che_route}}/api/permissions"
+    url: "https://{{che_route}}/api/permissions"
     validate_certs: false
     method: POST
     return_content: yes
