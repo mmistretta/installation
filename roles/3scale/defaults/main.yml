@@ -22,18 +22,18 @@ threescale_limit_range_pod_max_memory: 32Gi
 threescale_limit_range_pod_min_memory: 6Mi
 
 #Users
-threescale_evals_email: evals@example.com
-threescale_evals_username: evals
-threescale_evals_password: Password1
+threescale_evals_email: user@example.com
+threescale_evals_username: user
+threescale_evals_password: openshift
 
 rhsso_evals_admin_email: customer-admin@example.com
 rhsso_evals_admin_username: customer-admin
-rhsso_evals_admin_password: Password1
+rhsso_evals_admin_password: openshift
 
-rhsso_seed_users_email_format: evals%02d@example.com
-rhsso_seed_users_name_format: evals%02d
+rhsso_seed_users_email_format: user%02d@example.com
+rhsso_seed_users_name_format: user%02d
 rhsso_seed_users_count: "{{ eval_seed_users_count }}"
-rhsso_seed_users_password: Password1
+rhsso_seed_users_password: openshift
 
 threescale_cluster_admin_email: admin@example.com
 threescale_cluster_admin_username: "admin"

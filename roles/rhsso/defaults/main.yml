@@ -27,22 +27,22 @@ rhsso_operator_resource_items:
   - "{{ rhsso_operator_resources }}/crds/KeycloakRealm_crd.yaml"
   - "{{ rhsso_operator_resources }}/operator.yaml"
 
-rhsso_seed_users_email_format: evals%02d@example.com
-rhsso_seed_users_name_format: evals%02d
+rhsso_seed_users_email_format: user%02d@example.com
+rhsso_seed_users_name_format: user%02d
 rhsso_seed_users_count: "{{ eval_seed_users_count }}"
-rhsso_seed_users_password: Password1
+rhsso_seed_users_password: openshift
 
-rhsso_evals_email: evals@example.com  
+rhsso_evals_email: user@example.com  
 rhsso_evals_username: "{{ rhsso_evals_email }}" 
-rhsso_evals_password: Password1
+rhsso_evals_password: openshift
 
 rhsso_evals_admin_email: customer-admin@example.com
 rhsso_evals_admin_username: customer-admin
-rhsso_evals_admin_password: Password1
+rhsso_evals_admin_password: openshift
 
 rhsso_cluster_admin_email: admin@example.com
 rhsso_cluster_admin_username: admin
-rhsso_cluster_admin_password: Password1
+rhsso_cluster_admin_password: openshift
 
 rhsso_plugins:
   - keycloak-metrics-spi
